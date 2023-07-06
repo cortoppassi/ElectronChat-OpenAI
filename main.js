@@ -21,21 +21,32 @@ const createWindow = () => {
   win.webContents.openDevTools();
   win.webContents.on('did-finish-load', () => { //Executar o código quando o conteúdo da janela for carregado.
     win.webContents.executeJavaScript(`
-      const img = document.createElement('img');
-      img.src = 'https://i.pinimg.com/originals/ae/d1/1d/aed11d6975231b91c8e992c02b8376da.gif';
-      img.style.position = 'absolute';
-      img.style.top = '0';
-      img.style.left = '0';
-      img.style.width = '440px';
-      img.style.height = '440px';
-      img.style.clipPath = 'circle(100px at center)';
-      img.style.objectFit = 'cover';
-      img.style.overflow = 'hidden';
-      document.body.appendChild(img);
+        const img = document.createElement('img');
+        img.src = 'https://i.pinimg.com/originals/ae/d1/1d/aed11d6975231b91c8e992c02b8376da.gif';
+        img.style.position = 'absolute';
+        img.style.top = '0';
+        img.style.left = '0';
+        img.style.width = '440px';
+        img.style.height = '440px';
+        img.style.clipPath = 'circle(100px at center)';
+        img.style.objectFit = 'cover';
+        img.style.overflow = 'hidden';
+        document.head.appendChild(img);
 
-      const eventoDeClickImg = () => {
-        console.log('A imagem foi clicada!');
-      };
+        let divNext = document.getElementById("__next");
+        let visibilidade = true;
+        
+        const eventoDeClickImg = () => {
+            if (visibilidade) {
+                divNext.style.display = 'none';
+            } else {
+                divNext.style.display = 'block';
+            }
+            visibilidade = !visibilidade;
+            console.log('A imagem foi clicada!');
+        };
+        
+        
 
       img.addEventListener('click', eventoDeClickImg);
     `);
