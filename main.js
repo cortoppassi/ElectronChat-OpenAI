@@ -18,7 +18,7 @@ const createWindow = () => {
     });
   win.loadURL('https://chat.openai.com/');
 
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
   win.webContents.on('did-finish-load', () => { //Executar o código quando o conteúdo da janela for carregado.
     win.webContents.executeJavaScript(`
         const img = document.createElement('img');
@@ -28,10 +28,11 @@ const createWindow = () => {
         img.style.left = '0';
         img.style.width = '440px';
         img.style.height = '440px';
+        img.style.zindex = '9999';
         img.style.clipPath = 'circle(100px at center)';
         img.style.objectFit = 'cover';
         img.style.overflow = 'hidden';
-        document.head.appendChild(img);
+        document.body.appendChild(img);
 
         let divNext = document.getElementById("__next");
         let visibilidade = true;
@@ -39,6 +40,7 @@ const createWindow = () => {
         const eventoDeClickImg = () => {
             if (visibilidade) {
                 divNext.style.display = 'none';
+                minimizar();
             } else {
                 divNext.style.display = 'block';
             }
@@ -46,7 +48,9 @@ const createWindow = () => {
             console.log('A imagem foi clicada!');
         };
         
-        
+        function minimizar() {
+          console.log('Minimooo!')
+        }
 
       img.addEventListener('click', eventoDeClickImg);
     `);
