@@ -42,16 +42,22 @@ const createWindow = () => {
         const eventoDeClickImg = () => {
           if (!visibilidade) {
             console.log('click');
-            startRecognition()
+            captureText();
+            startRecognition();
             visibilidade = true;
           } else {
             console.log('clack');
             visibilidade = false;
           }
         };
-
         img.addEventListener('click', eventoDeClickImg);
 
+        function captureText() {
+          const divElement = document.querySelector('.markdown');
+          const valorDaDiv = divElement.textContent;
+          console.log(valorDaDiv);
+        }
+        
         function startRecognition() {
           const recognition = new webkitSpeechRecognition() || SpeechRecognition();
 
@@ -72,6 +78,22 @@ const createWindow = () => {
 
           recognition.start();
         }
+
+        function convertToSpeech() {
+          console.log('ok')
+          const inputText = document.getElementById('input-text').value;
+          const synthesis = window.speechSynthesis;
+          const utterance = new SpeechSynthesisUtterance(inputText);
+
+          utterance.lang = 'pt-BR'; // Defina o idioma da síntese de fala, neste exemplo, o Português do Brasil.
+
+          synthesis.speak(utterance);
+        }
+
+        const speechButton = document.getElementById("speechButton");
+        speechButton.addEventListener("click", function() {
+          convertToSpeech(); // Chama a função quando o botão for clicado
+        });
     `);
   });
 
