@@ -36,14 +36,13 @@ const createWindow = () => {
         img.style.overflow = 'hidden';
         document.body.appendChild(img);
 
-        let divNext = document.getElementById("__next");
         let visibilidade = false;
 
         const eventoDeClickImg = () => {
           if (!visibilidade) {
             console.log('click');
+            startRecognition()
             captureText();
-            startRecognition();
             visibilidade = true;
           } else {
             console.log('clack');
@@ -59,41 +58,53 @@ const createWindow = () => {
         }
         
         function startRecognition() {
-          const recognition = new webkitSpeechRecognition() || SpeechRecognition();
+          // Verifica se o navegador suporta a API de reconhecimento de fala
+          recognition = new (webkitSpeechRecognition || SpeechRecognition)(); 
 
-          recognition.lang = 'pt-BR'; // Defina o idioma do reconhecimento, neste exemplo, o Português do Brasil.
+          recognition.lang = 'pt-BR';
 
           recognition.onresult = function(event) {
               const text = event.results[0][0].transcript;
-              document.getElementById('output').innerText = "Texto reconhecido:" + text;
+              document.getElementById('prompt-textarea').innerText = text;
+              console.log(text);
           };
 
           recognition.onerror = function(event) {
               console.error('Erro de reconhecimento:', event.error);
           };
 
-          recognition.onend = function() {
-              console.log('Reconhecimento encerrado.');
-          };
-
           recognition.start();
         }
 
+        const divElement = document.getElementById('__next');
         function convertToSpeech() {
-          console.log('ok')
-          const inputText = document.getElementById('input-text').value;
+          const paragraphs = divElement.querySelectorAll('p');
+        
+          let textoParaFala = '';
+          paragraphs.forEach((paragraph) => {
+            textoParaFala += paragraph.textContent + ' ';
+          });
+        
           const synthesis = window.speechSynthesis;
-          const utterance = new SpeechSynthesisUtterance(inputText);
-
-          utterance.lang = 'pt-BR'; // Defina o idioma da síntese de fala, neste exemplo, o Português do Brasil.
-
+          const utterance = new SpeechSynthesisUtterance(textoParaFala);
+          utterance.lang = 'pt-BR'
+          utterance.onend = () => {
+            // Quando a fala é concluída, o evento onend é acionado.
+            // Neste momento, vamos começar a leitura novamente.
+            synthesis.speak(utterance);
+          };
           synthesis.speak(utterance);
         }
-
-        const speechButton = document.getElementById("speechButton");
-        speechButton.addEventListener("click", function() {
-          convertToSpeech(); // Chama a função quando o botão for clicado
-        });
+        
+        const observer = new MutationObserver(convertToSpeech);
+        const observerOptions = {
+          childList: true, // Observar mudanças nos filhos (parágrafos) do nó alvo.
+          subtree: true,   // Observar mudanças em todos os nós descendentes.
+        };
+        
+        // Inicie a observação no elemento alvo usando as opções configuradas
+        observer.observe(divElement, observerOptions);
+        
     `);
   });
 
