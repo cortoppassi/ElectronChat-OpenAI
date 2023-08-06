@@ -58,15 +58,12 @@ const createWindow = () => {
         }
         
         function startRecognition() {
-          // Verifica se o navegador suporta a API de reconhecimento de fala
-          recognition = new (webkitSpeechRecognition || SpeechRecognition)(); 
-
+          recognition = new (webkitSpeechRecognition || SpeechRecognition)();
           recognition.lang = 'pt-BR';
 
           recognition.onresult = function(event) {
               const text = event.results[0][0].transcript;
               document.getElementById('prompt-textarea').innerText = text;
-              console.log(text);
           };
 
           recognition.onerror = function(event) {
@@ -87,12 +84,8 @@ const createWindow = () => {
         
           const synthesis = window.speechSynthesis;
           const utterance = new SpeechSynthesisUtterance(textoParaFala);
-          utterance.lang = 'pt-BR'
-          utterance.onend = () => {
-            // Quando a fala é concluída, o evento onend é acionado.
-            // Neste momento, vamos começar a leitura novamente.
-            synthesis.speak(utterance);
-          };
+          utterance.lang = 'pt-BR';
+
           synthesis.speak(utterance);
         }
         
