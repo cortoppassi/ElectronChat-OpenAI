@@ -2,9 +2,9 @@ const { app, BrowserWindow, screen} = require('electron');
 
 
 const createWindow = () => {
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize; //Dimensões da área de trabalho do monitor principal.
-  const windowWidth = 400; // (Número): Define a largura da janela em pixels.
-  const windowHeight = 500; //  (Número): Define a altura da janela em pixels.
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  const windowWidth = 400;
+  const windowHeight = 500;
   const x = width - windowWidth;
   const y = height - windowHeight;
 
@@ -13,13 +13,13 @@ const createWindow = () => {
         height: windowHeight,
         x: x,
         y: y,
-        frame: false, //  (Booleano): Define se a janela possui uma barra de título e bordas.
-        transparent: true, // (Booleano): Define se a janela é transparente.
-        alwaysOnTop: true, //(Booleano): Define se a janela está sempre no topo de outras janelas.
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
     });
   win.loadURL('https://chat.openai.com/');
 
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
   win.webContents.on('did-finish-load', () => { //Executar o código quando o conteúdo da janela for carregado.
   
     win.webContents.executeJavaScript(`
